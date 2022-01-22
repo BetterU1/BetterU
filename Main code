@@ -1,0 +1,880 @@
+# Import module
+from tkinter import *
+import tkinter.font as font
+from datetime import datetime
+import matplotlib.pyplot as plt
+from dateutil.relativedelta import relativedelta
+
+# Create object
+root = Tk()
+root.title('Vitamin Tracker')
+root.geometry("450x450")
+Screen_1 = Toplevel(root)
+Screen_1.title('Vitamin Tracker')
+Screen_1.geometry("460x450")
+Screen_1.withdraw()
+
+# Variables
+Name = 'user'
+Age = 'user'
+Gender = 'user'
+Vitamin_D = 1
+Sugar = 1
+run = True
+
+
+# Functions
+def Submit_form():
+    global Name_Q, Age_Q, Gender_Q, Name, Age, Gender, run
+    Name = Name_Q.get()
+    Age = Age_Q.get()
+    Gender = Gender_Q.get()
+    root.withdraw()
+    Screen_1.deiconify()
+    First_Name = Name.split()
+
+    # Intro
+    myFont_I_1 = ("Bell MT", 12)
+    myFont_I_2 = ("Bell MT", 10)
+    Intro_1 = Label(frame_1, text=f"Hello {First_Name[0]}, get to know more about your health")
+    Intro_2 = Label(frame_1, text="Enter Values below, type no if not available")
+    Intro_1.grid(row=0, column=0)
+    Intro_1.configure(font=myFont_I_1)
+    Intro_2.grid(row=1, column=0)
+    Intro_2.configure(font=myFont_I_2)
+
+
+def Submit_form_1():
+    global Vitamin_D_Q, Vitamin_D, Sugar, Sugar_Q, Cholesterol_Q, BP_Q, Vitamin_D_Value
+    Sugar = Sugar_Q.get()
+    Vitamin_D = Vitamin_D_Q.get()
+    Cholesterol = Cholesterol_Q.get()
+    BP = BP_Q.get()
+    BP_LIST = BP.split(", ", 1)
+    BP1 = BP_LIST[0]
+    Screen_1.withdraw()
+    Screen_3 = Toplevel(root)
+    Screen_3.title('Vitamin Tracker')
+    Screen_3.geometry("450x550")
+    myFont_I_D = ("Bell MT", 14)
+    Heading_D = Label(Screen_3, text="BetterU", padx=40, fg='Green')
+    myFont_H_D = ("Comic Sans MS", 40, "bold")
+    Heading_D.grid(row=0, column=0, columnspan=3)
+    Heading_D.configure(font=myFont_H_D)
+
+    Level_D = Label(Screen_3, text="      ")
+    Level_D.grid(row=1, column=0)
+    message_D = Label(Screen_3, text="Smart Management of Vitamins and diabetes")
+    myFont_W_D = ("Arial", 15)
+    message_D.grid(row=1, column=1)
+    message_D.configure(font=myFont_W_D)
+    if Vitamin_D.upper() == "NO":
+        myFont_N_D = ("Bell MT", 34)
+        No_Thing = Label(Screen_3, text="""Nothing to show 
+here for your 
+Vitamin-D""")
+        No_Thing.grid(row=2, column=1, columnspan=3)
+        No_Thing.configure(font=myFont_N_D)
+    else:
+        Welc_D = Label(Screen_3, text=f"Your Vitamin-D: {Vitamin_D}")
+        Welc_D.grid(row=2, column=1)
+        Welc_D.configure(font=myFont_I_D)
+        if int(Vitamin_D) <= 40:
+            Vitamin_D_Value = 0
+        elif 40 < int(Vitamin_D) <= 100:
+            Vitamin_D_Value = 1
+        elif 100 < int(Vitamin_D):
+            Vitamin_D_Value = 2
+
+        # Table for Vitamin-D
+        frame_S = LabelFrame(Screen_3, padx=10, pady=10)
+        frame_S.grid(row=3, column=1, columnspan=3, padx=10, pady=10)
+        # Row 1
+        R_D = Label(frame_S, text='Range')
+        Space_R_D = Label(frame_S, text='     |     ')
+        Result_D = Label(frame_S, text='Result')
+        Space_Re_D = Label(frame_S, text='     |     ')
+        Y_D = Label(frame_S, text='You are')
+        R_D.grid(row=0, column=0, padx=10)
+        Space_R_D.grid(row=0, column=1)
+        Result_D.grid(row=0, column=2, padx=10)
+        Space_Re_D.grid(row=0, column=3)
+        Y_D.grid(row=0, column=4, padx=10)
+
+        # Row 2
+        R_1_D = Label(frame_S, text='<40')
+        Result_1_D = Label(frame_S, text='Deficient')
+        R_1_D.grid(row=1, column=0)
+        Result_1_D.grid(row=1, column=2)
+
+        # Row 3
+        R_2_D = Label(frame_S, text='40-100')
+        Result_2_D = Label(frame_S, text='Normal')
+        R_2_D.grid(row=2, column=0)
+        Result_2_D.grid(row=2, column=2)
+
+        # Row 4
+        R_3_D = Label(frame_S, text='>100')
+        Result_3_D = Label(frame_S, text='Toxic')
+        R_3_D.grid(row=3, column=0)
+        Result_3_D.grid(row=3, column=2)
+
+        Y_1_D = Label(frame_S, text='<--- Here')
+        Y_1_D.grid(row=Vitamin_D_Value + 1, column=4)
+
+        # Tip and Action Frame
+        frame_D_1 = LabelFrame(Screen_3, padx=10, pady=10)
+        frame_D_1.grid(row=4, column=1, columnspan=3, padx=10, pady=10)
+
+        # Action And Tip
+        if Vitamin_D_Value == 0:
+            Action_D = Label(frame_D_1, text="""
+Action:
+Deficient level of Vitamin D can cause bone health issues.
+Please see a doctor to start vitamin D supplements.""")
+
+            Tip_1_D = Label(frame_D_1, text="""
+Tip:
+1.) Have alternate Mid-day sun exposure for 30-40 minutes a day.
+2.) Have 400ml of fortified milk a day""")
+            Action_D.grid(row=0, column=0)
+
+            Tip_1_D.grid(row=1, column=0)
+        elif Vitamin_D_Value == 1:
+            Action_D = Label(frame_D_1, text="""
+Action:
+Your Vitamin D level is just right.
+Get it checked once a year.""")
+
+            Tip_1_D = Label(frame_D_1, text="""
+Tip:
+1.) Include milk and dairy products in your diet""")
+            Action_D.grid(row=0, column=0)
+            Tip_1_D.grid(row=1, column=0)
+        elif Vitamin_D_Value == 2:
+            Action_D = Label(frame_D_1, text="""
+Action:
+Your Vitamin D level is high. 
+See a doctor and get the level checked again after six months.""")
+
+            Tip_1_D = Label(frame_D_1, text="""
+Tip:
+1. Avoid exposure to sun.
+2. Do not take Vitamin supplements.""")
+            Action_D.grid(row=0, column=0)
+
+            Tip_1_D.grid(row=1, column=0)
+
+    def Submit_form_D():
+        global Sugar_Value
+        Screen_3.destroy()
+        Screen_2 = Toplevel(root)
+        Screen_2.title('Vitamin Tracker')
+        Screen_2.geometry("450x550")
+
+        Heading_S = Label(Screen_2, text="BetterU", padx=40, fg='Green')
+        myFont_H_S = ("Comic Sans MS", 40, "bold")
+        Heading_S.grid(row=0, column=0, columnspan=3)
+        Heading_S.configure(font=myFont_H_S)
+
+        Level_S = Label(Screen_2, text="      ")
+        Level_S.grid(row=1, column=0)
+        message_S = Label(Screen_2, text="Smart Management of Vitamins and diabetes")
+        myFont_W_S = ("Arial", 15)
+        message_S.grid(row=1, column=1)
+        message_S.configure(font=myFont_W_S)
+
+        if Sugar.upper() == "NO":
+            myFont_N_S = ("Bell MT", 34)
+            No_ThingS = Label(Screen_2, text="""Nothing to show 
+here for your Sugar""")
+            No_ThingS.grid(row=2, column=1, columnspan=3)
+            No_ThingS.configure(font=myFont_N_S)
+
+        else:
+            frame_S1 = LabelFrame(Screen_2, padx=10, pady=10)
+            frame_S1.grid(row=3, column=1, columnspan=3, padx=10, pady=10)
+
+            myFont_I_S = ("Bell MT", 14)
+            Welc = Label(Screen_2, text=f"Your Random blood sugar: {Sugar}")
+            Welc.grid(row=2, column=1)
+            Welc.configure(font=myFont_I_S)
+
+            if int(Sugar) <= 140:
+                Sugar_Value = 0
+            elif 140 < int(Sugar) <= 200:
+                Sugar_Value = 1
+            elif 200 < int(Sugar):
+                Sugar_Value = 2
+
+            # Table
+            # Row 1
+            myFont_W_H = ("Terminal", 11)
+            R_S = Label(frame_S1, text='Range')
+            Space_R_S = Label(frame_S1, text='     |     ')
+            Result_S = Label(frame_S1, text='Result')
+            Space_Re_S = Label(frame_S1, text='     |     ')
+            Y_S = Label(frame_S1, text='You are')
+            R_S.grid(row=0, column=0, padx=10)
+            Space_R_S.grid(row=0, column=1)
+            Result_S.grid(row=0, column=2, padx=10)
+            Space_Re_S.grid(row=0, column=3)
+            Y_S.grid(row=0, column=4, padx=10)
+            R_S.configure(font=myFont_W_H)
+            Result_S.configure(font=myFont_W_H)
+            Y_S.configure(font=myFont_W_H)
+
+            # Row 2
+            R_1_S = Label(frame_S1, text='<140')
+            Result_1_S = Label(frame_S1, text='Normal')
+            R_1_S.grid(row=1, column=0)
+            Result_1_S.grid(row=1, column=2)
+
+            # Row 3
+            R_2_S = Label(frame_S1, text='140-200')
+            Result_2_S = Label(frame_S1, text='Pre-Diabetes')
+            R_2_S.grid(row=2, column=0)
+            Result_2_S.grid(row=2, column=2)
+
+            # Row 4
+            R_3_S = Label(frame_S1, text='>200')
+            Result_3_S = Label(frame_S1, text='Diabetes')
+            R_3_S.grid(row=3, column=0)
+            Result_3_S.grid(row=3, column=2)
+
+            Y_1_S = Label(frame_S1, text='<--- Here')
+            Y_1_S.grid(row=Sugar_Value + 1, column=4)
+
+            # Tip and Action Frame
+            frame_S_1 = LabelFrame(Screen_2, padx=10, pady=10)
+            frame_S_1.grid(row=4, column=1, columnspan=3, padx=10, pady=10)
+
+            # Action and Tip
+            if Sugar_Value == 0:
+                Action_S = Label(frame_S_1, text="""
+Action:
+You have a normal Blood Sugar level which
+is good for overall health.
+Remember to check the level again after a year.""")
+
+                Tip_S = Label(frame_S_1, text="""
+Tip:
+1.) It is recommended to drink at least 8 glasses of water daily.
+2.) Engage in 30 minutes of physical activity like walking.""")
+                Action_S.grid(row=0, column=0)
+
+                Tip_S.grid(row=1, column=0)
+            elif Sugar_Value == 1:
+                Action_S = Label(frame_S_1, text="""
+Action:
+You have a high Blood Sugar level.
+Remember to check the level again in 3 months.""")
+
+                Tip_S = Label(frame_S_1, text="""
+Tip:
+1.) Reduce high fat and high sugar foods to minimum.
+2.) Start a yoga/exercise program in consultation
+with an expert.""")
+                Action_S.grid(row=0, column=0)
+
+                Tip_S.grid(row=1, column=0)
+            elif Sugar_Value == 2:
+                Action_S = Label(frame_S_1, text="""
+Action:
+You have a very high Blood Sugar level
+which may lead to increased risk of complications.
+Please immediately see a doctor to start the treatment.""")
+
+                Tip_S = Label(frame_S_1, text="""
+Tip:
+1.) Eating 25-35 gms of fibre daily will help
+in lowering the blood sugar. 
+2.) Start monitoring the blood sugar level daily.""")
+                Action_S.grid(row=0, column=0)
+
+                Tip_S.grid(row=1, column=0)
+
+        def back():
+            global Cholesterol_Value
+            Screen_2.destroy()
+            Screen_4 = Toplevel(root)
+            Screen_4.title('Vitamin Tracker')
+            Screen_4.geometry("450x550")
+
+            Heading_C = Label(Screen_4, text="BetterU", padx=40, fg='Green')
+            myFont_H_C = ("Comic Sans MS", 40, "bold")
+            Heading_C.grid(row=0, column=0, columnspan=3)
+            Heading_C.configure(font=myFont_H_C)
+
+            Level_C = Label(Screen_4, text="      ")
+            Level_C.grid(row=1, column=0)
+            message_C = Label(Screen_4, text="Smart Management of Vitamins and diabetes")
+            myFont_W_C = ("Arial", 15)
+            message_C.grid(row=1, column=1)
+            message_C.configure(font=myFont_W_C)
+
+            if Cholesterol.upper() == "NO":
+                myFont_N_C = ("Bell MT", 34)
+                No_ThingC = Label(Screen_4, text="""Nothing to show 
+here for your 
+Cholesterol""")
+                No_ThingC.grid(row=2, column=1, columnspan=3)
+                No_ThingC.configure(font=myFont_N_C)
+
+            else:
+                frame_C1 = LabelFrame(Screen_4, padx=10, pady=10)
+                frame_C1.grid(row=3, column=1, columnspan=3, padx=10, pady=10)
+
+                myFont_I_C = ("Bell MT", 14)
+                Welc_C = Label(Screen_4, text=f"Your Total Blood Cholesterol: {Cholesterol}")
+                Welc_C.grid(row=2, column=1)
+                Welc_C.configure(font=myFont_I_C)
+
+                if int(Cholesterol) <= 200:
+                    Cholesterol_Value = 0
+                elif 200 < int(Cholesterol) <= 240:
+                    Cholesterol_Value = 1
+                elif 240 < int(Cholesterol):
+                    Cholesterol_Value = 2
+
+                # Table
+                # Row 1
+                myFont_C_H = ("Terminal", 11)
+                R_C = Label(frame_C1, text='Range')
+                Space_R_C = Label(frame_C1, text='     |     ')
+                Result_C = Label(frame_C1, text='Result')
+                Space_Re_C = Label(frame_C1, text='     |     ')
+                Y_C = Label(frame_C1, text='You are')
+                R_C.grid(row=0, column=0, padx=10)
+                Space_R_C.grid(row=0, column=1)
+                Result_C.grid(row=0, column=2, padx=10)
+                Space_Re_C.grid(row=0, column=3)
+                Y_C.grid(row=0, column=4, padx=10)
+                R_C.configure(font=myFont_C_H)
+                Result_C.configure(font=myFont_C_H)
+                Y_C.configure(font=myFont_C_H)
+
+                # Row 2
+                R_1_H = Label(frame_C1, text='<200')
+                Result_1_C = Label(frame_C1, text='Normal')
+                R_1_H.grid(row=1, column=0)
+                Result_1_C.grid(row=1, column=2)
+
+                # Row 3
+                R_2_C = Label(frame_C1, text='200-240')
+                Result_2_C = Label(frame_C1, text='Borderline High Risk')
+                R_2_C.grid(row=2, column=0)
+                Result_2_C.grid(row=2, column=2)
+
+                # Row 4
+                R_3_C = Label(frame_C1, text='>240')
+                Result_3_C = Label(frame_C1, text='High Risk')
+                R_3_C.grid(row=3, column=0)
+                Result_3_C.grid(row=3, column=2)
+
+                Y_1_C = Label(frame_C1, text='<--- Here')
+                Y_1_C.grid(row=Cholesterol_Value + 1, column=4)
+
+                # Tip and Action Frame
+                frame_C_1 = LabelFrame(Screen_4, padx=10, pady=10)
+                frame_C_1.grid(row=4, column=1, columnspan=3, padx=10, pady=10)
+
+                # Action and Tip
+                if Cholesterol_Value == 0:
+                    Action_C = Label(frame_C_1, text="""
+Action:
+You have a normal Blood Cholesterol level
+which is good for overall health. 
+Remember to check the level again after a year.""")
+
+                    Tip_C = Label(frame_C_1, text="""
+Tip:
+1.) It is recommended to drink at least 8 glasses of water daily.
+2.) Engage in 30 minutes of physical activity like walking.""")
+                    Action_C.grid(row=0, column=0)
+
+                    Tip_C.grid(row=1, column=0)
+                elif Cholesterol_Value == 1:
+                    Action_C = Label(frame_C_1, text="""
+Action:
+Consult a doctor if you have a family history of 
+heart disease or you are overweight.""")
+
+                    Tip_C = Label(frame_C_1, text="""
+Tip:
+1.) Quit smoking, if this applies. 
+Engage in 30 minutes of physical activity like walking.
+2.) Increase consumption of Omega-3 fat rich 
+products like seeds and nuts""")
+                    Action_C.grid(row=0, column=0)
+
+                    Tip_C.grid(row=1, column=0)
+                elif Cholesterol_Value == 2:
+                    Action_C = Label(frame_C_1, text="""
+Action:
+Seek medical advice immediately.""")
+
+                    Tip_C = Label(frame_C_1, text="""
+Tip:
+1.) Remove trans fats from your food.
+2.) Increase foods rich in soluble fibre like fruits, 
+cereals and beans as these help lower the cholesterol.""")
+                    Action_C.grid(row=0, column=0)
+
+                    Tip_C.grid(row=1, column=0)
+
+            def back_1():
+                global BP_Value
+                Screen_4.destroy()
+                Screen_5 = Toplevel(root)
+                Screen_5.title('Vitamin Tracker')
+                Screen_5.geometry("450x550")
+
+                Heading_BP = Label(Screen_5, text="BetterU", padx=40, fg='Green')
+                myFont_H_BP = ("Comic Sans MS", 40, "bold")
+                Heading_BP.grid(row=0, column=0, columnspan=3)
+                Heading_BP.configure(font=myFont_H_BP)
+
+                Level_BP = Label(Screen_5, text="      ")
+                Level_BP.grid(row=1, column=0)
+                message_BP = Label(Screen_5, text="Smart Management of Vitamins and diabetes")
+                myFont_W_BP = ("Arial", 15)
+                message_BP.grid(row=1, column=1)
+                message_BP.configure(font=myFont_W_BP)
+
+                if BP1.upper() == "NO":
+                    myFont_N_BP = ("Bell MT", 34)
+                    No_ThingBP = Label(Screen_5, text="""Nothing to show 
+here sorry for your Blood Pressure""")
+                    No_ThingBP.grid(row=2, column=1, columnspan=3)
+                    No_ThingBP.configure(font=myFont_N_BP)
+
+                else:
+                    frame_BP1 = LabelFrame(Screen_5, padx=10, pady=10)
+                    frame_BP1.grid(row=3, column=1, columnspan=3, padx=10, pady=10)
+
+                    myFont_I_BP = ("Bell MT", 14)
+                    Welc_Bp = Label(Screen_5, text=f"Your Blood Pressure: {BP1}")
+                    Welc_Bp.grid(row=2, column=1)
+                    Welc_Bp.configure(font=myFont_I_BP)
+
+                    if int(BP1) <= 90:
+                        BP_Value = 0
+                    elif 90 < int(BP1) <= 120:
+                        BP_Value = 1
+                    elif 120 < int(BP1) <= 140:
+                        BP_Value = 2
+                    elif 140 < int(BP1):
+                        BP_Value = 3
+
+                    # Table
+                    # Row 1
+                    myFont_C_BP = ("Terminal", 11)
+                    R_BP = Label(frame_BP1, text='Range')
+                    Space_R_BP = Label(frame_BP1, text='     |     ')
+                    Result_BP = Label(frame_BP1, text='Result')
+                    Space_Re_BP = Label(frame_BP1, text='     |     ')
+                    Y_BP = Label(frame_BP1, text='You are')
+                    R_BP.grid(row=0, column=0, padx=10)
+                    Space_R_BP.grid(row=0, column=1)
+                    Result_BP.grid(row=0, column=2, padx=10)
+                    Space_Re_BP.grid(row=0, column=3)
+                    Y_BP.grid(row=0, column=4, padx=10)
+                    R_BP.configure(font=myFont_C_BP)
+                    Result_BP.configure(font=myFont_C_BP)
+                    Y_BP.configure(font=myFont_C_BP)
+
+                    # Row 2
+                    R_1_BP = Label(frame_BP1, text='<90')
+                    Result_1_BP = Label(frame_BP1, text='Low blood pressure')
+                    R_1_BP.grid(row=1, column=0)
+                    Result_1_BP.grid(row=1, column=2)
+
+                    # Row 3
+                    R_2_BP = Label(frame_BP1, text='90-120')
+                    Result_2_BP = Label(frame_BP1, text='Normal')
+                    R_2_BP.grid(row=2, column=0)
+                    Result_2_BP.grid(row=2, column=2)
+
+                    # Row 4
+                    R_3_Bp = Label(frame_BP1, text='120-140')
+                    Result_3_BP = Label(frame_BP1, text='High blood pressure')
+                    R_3_Bp.grid(row=3, column=0)
+                    Result_3_BP.grid(row=3, column=2)
+
+                    # Row 5
+                    R_4_Bp = Label(frame_BP1, text='>140')
+                    Result_4_BP = Label(frame_BP1, text='Hypertension')
+                    R_4_Bp.grid(row=3, column=0)
+                    Result_4_BP.grid(row=4, column=2)
+
+                    Y_1_BP = Label(frame_BP1, text='<--- Here')
+                    Y_1_BP.grid(row=BP_Value + 1, column=4)
+
+                    # Tip and Action Frame
+                    frame_BP_1 = LabelFrame(Screen_5, padx=10, pady=10)
+                    frame_BP_1.grid(row=4, column=1, columnspan=3, padx=10, pady=10)
+
+                    # Action and Tip
+                    if BP_Value == 0:
+                        Action_BP = Label(frame_BP_1, text="""
+Action:
+If you are feeling dizziness or fainting, seek medical help. """)
+
+                        Tip_BP = Label(frame_BP_1, text="""
+Tip:
+1.) Keep a record of your symptoms, when they occur 
+and what you're doing at the time.
+2.) Drink plenty of water, buttermilk and have smaller meals""")
+                        Action_BP.grid(row=0, column=0)
+
+                        Tip_BP.grid(row=1, column=0)
+                    elif BP_Value == 1:
+                        Action_BP = Label(frame_BP_1, text="""
+Action:
+Have an active lifestyle and healthy diet to keep your blood pressure normal. 
+Get your BP checked every year""")
+
+                        Tip_BP = Label(frame_BP_1, text="""
+Tip:
+1.) 7-8 hours of sleep per night helps in maintaining the BP in normal range.
+2.) Extra weight increases the BP. Keep your weight in healthy range.""")
+                        Action_BP.grid(row=0, column=0)
+
+                        Tip_BP.grid(row=1, column=0)
+                    elif BP_Value == 2:
+                        Action_BP = Label(frame_BP_1, text="""
+Action:
+Make physical activity a habit. Get few more readings in 
+consultation with a doctor before you start any medication.""")
+
+                        Tip_BP = Label(frame_BP_1, text="""
+Tip:
+1.) Cut down on sodium intake.
+2.) Follow DASH diet which includes vegetables, 
+fruits, whole grains and low fat dairy products.""")
+                        Action_BP.grid(row=0, column=0)
+
+                        Tip_BP.grid(row=1, column=0)
+                    elif BP_Value == 3:
+                        Action_BP = Label(frame_BP_1, text="""
+Action:
+See a doctor to make lifestyle changes and medication. 
+Do not consume alcohol and do not smoke.""")
+
+                        Tip_BP = Label(frame_BP_1, text="""
+Tip:
+1.) Start at least 30 minutes a day of moderate 
+intensity exercise. 
+2.) Follow dietary routine as recommended by an 
+expert nutritionist to control the BP.""")
+                        Action_BP.grid(row=0, column=0)
+
+                        Tip_BP.grid(row=1, column=0)
+
+                def back_2():
+                    global Age_Q, Gender_Q, Name_Q
+                    Age_Q.delete(0, END)
+                    Name_Q.delete(0, END)
+                    Gender_Q.delete(0, END)
+                    Vitamin_D_Q.delete(0, END)
+                    Sugar_Q.delete(0, END)
+                    Cholesterol_Q.delete(0, END)
+                    BP_Q.delete(0, END)
+                    Age_Q.insert(0, "Enter your Age")
+                    Name_Q.insert(0, "Enter your Name")
+                    Gender_Q.insert(0, "Enter your Gender")
+                    Vitamin_D_Q.insert(0, 'Vitamin-D Level')
+                    Sugar_Q.insert(0, "Random Blood Sugar")
+                    Cholesterol_Q.insert(0, "Cholesterol")
+                    BP_Q.insert(0, "Blood Pressure")
+                    root.deiconify()
+                    Screen_5.destroy()
+
+                # Back Button
+                Back_Bp = Button(Screen_5, text='Go Back', command=back_2)
+                Back_Bp.grid(row=6, column=1, pady=5)
+
+                # Exit Button
+                Exit_BP = Button(Screen_5, text='Exit', command=root.destroy, padx=20)
+                Exit_BP.grid(row=5, column=1)
+
+            # Back Button
+            Back_C = Button(Screen_4, text="Let's proceed", command=back_1, padx=10, font=myFont_1_D, fg="Green")
+            Back_C.grid(row=5, column=1, padx=10, pady=10)
+
+            # Exit Button
+            Exit_C = Button(Screen_4, text='Exit', command=root.destroy, padx=20)
+            Exit_C.grid(row=6, column=1)
+
+        # Back Button
+        Back = Button(Screen_2, text="Let's Proceed", command=back, padx=10, font=myFont_1_D, fg="Green")
+        Back.grid(row=5, column=1, padx=10, pady=10)
+
+        # Exit Button
+        Exit_S = Button(Screen_2, text='Exit', command=root.destroy, padx=20)
+        Exit_S.grid(row=6, column=1)
+
+    myFont_1_D = font.Font(size=15)
+    Submit_D = Button(Screen_3, text="Let's Proceed", command=Submit_form_D, padx=10, font=myFont_1_D, fg="Green")
+    Submit_D.grid(row=5, column=1, padx=10, pady=10)
+
+    Exit_D = Button(Screen_3, text='Exit', command=root.destroy, padx=20)
+    Exit_D.grid(row=6, column=1)
+
+    Screen_3.deiconify()
+
+
+def AI_calc(V1, V2, V3, V4, CV):
+    CV = int(CV)
+    V1 = int(V1)
+    V2 = int(V2)
+    V3 = int(V3)
+    V4 = int(V4)
+    average = (V1 + V2 + V3 + V4 + CV) / 5
+    Result = 1
+    if average > CV:
+        Result = 105 / 100 * CV
+    elif average < CV:
+        Result = 95 / 100 * CV
+    elif average == CV:
+        Result = CV
+
+    return Result
+
+
+# Creating the Heading
+Heading = Label(root, text="BetterU", padx=40, fg='Green')
+myFont_H = ("Comic Sans MS", 40, "bold")
+Heading.grid(row=0, column=0, columnspan=3)
+Heading.configure(font=myFont_H)
+
+Heading_1 = Label(Screen_1, text="BetterU", padx=40, fg='Green')
+myFont_H_1 = ("Comic Sans MS", 40, "bold")
+Heading_1.grid(row=0, column=0, columnspan=3)
+Heading_1.configure(font=myFont_H_1)
+
+# Welcome Message
+Level = Label(root, text="      ")
+Level.grid(row=1, column=0)
+message = Label(root, text="Smart Management of Vitamins and diabetes")
+myFont_W = ("Arial", 15)
+message.grid(row=1, column=1)
+message.configure(font=myFont_W)
+
+Level_1 = Label(Screen_1, text="      ")
+Level_1.grid(row=1, column=0)
+message_1 = Label(Screen_1, text="Smart Management of Vitamins and diabetes")
+myFont_W_1 = ("Arial", 15)
+message_1.grid(row=1, column=1)
+message_1.configure(font=myFont_W_1)
+
+# Frame for Questions
+frame = LabelFrame(root, padx=10, pady=10)
+frame.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
+
+frame_1 = LabelFrame(Screen_1, padx=10, pady=10)
+frame_1.grid(row=2, column=1, columnspan=3, padx=10, pady=10)
+
+# Question 1
+Name_Q = Entry(frame, width=60, borderwidth=2)
+Name_Q.grid(row=0, column=0, pady=5)
+Name_Q.insert(0, 'Enter your Name')
+
+Vitamin_D_Q = Entry(frame_1, width=60, borderwidth=2)
+Vitamin_D_Q.insert(0, "Vitamin-D Level")
+Vitamin_D_Q.grid(row=2, column=0, pady=5)
+Check = Label(frame_1, text="*", fg="Red")
+Check.grid(row=2, column=1)
+
+# Question 2
+Age_Q = Entry(frame, width=60, borderwidth=2)
+Age_Q.grid(row=1, column=0, pady=5)
+Age_Q.insert(0, 'Enter your Age')
+
+Sugar_Q = Entry(frame_1, width=60, borderwidth=2)
+Sugar_Q.insert(0, "Random Blood Sugar")
+Sugar_Q.grid(row=4, column=0, pady=5)
+Check_1 = Label(frame_1, text="*", fg="Red")
+Check_1.grid(row=4, column=1)
+
+# Question 3
+Gender_Q = Entry(frame, width=60, borderwidth=2)
+Gender_Q.grid(row=2, column=0, pady=5)
+Gender_Q.insert(0, 'Enter your Gender')
+
+Cholesterol_Q = Entry(frame_1, width=60, borderwidth=2)
+Cholesterol_Q.insert(0, "Cholesterol")
+Cholesterol_Q.grid(row=5, column=0, pady=5)
+Check_2 = Label(frame_1, text="*", fg="Red")
+Check_2.grid(row=5, column=1)
+
+# Question 4
+BP_Q = Entry(frame_1, width=60, borderwidth=2)
+BP_Q.insert(0, "Blood Pressure")
+BP_Q.grid(row=6, column=0, pady=5)
+Check_3 = Label(frame_1, text="*", fg="Red")
+Check_3.grid(row=6, column=1)
+
+Check_D = Vitamin_D_Q.get()
+Check_S = Sugar_Q.get()
+Check_C = Cholesterol_Q.get()
+Check_BP = BP_Q.get()
+if Check_D.isnumeric():
+    print('D')
+if Check_S.isnumeric():
+    print('S')
+if Check_C.isnumeric():
+    print('C')
+if Check_BP.isnumeric():
+    print('BP')
+
+Screen_1.update()
+
+
+# Grid
+def Get_Graph():
+    Screen_6 = Toplevel(root)
+    Screen_6.geometry("450x450")
+    Screen_1.withdraw()
+
+    # Functions
+    def Graph():
+        V_1 = Value_1.get()
+        V_2 = Value_2.get()
+        V_3 = Value_3.get()
+        V_4 = Value_4.get()
+        C_V = Current_Value.get()
+        AI = AI_calc(V_1, V_2, V_3, V_4, C_V)
+        D_1 = Date_1.get()
+        D_2 = Date_2.get()
+        D_3 = Date_3.get()
+        D_4 = Date_4.get()
+        Test = clicked.get()
+        Dt_1 = D_1.split("/")
+        Dt_2 = D_2.split("/")
+        Dt_3 = D_3.split("/")
+        Dt_4 = D_4.split("/")
+        today = datetime.now()
+        month = datetime.now() + relativedelta(months=+1)
+        x = [int(V_1), int(V_2), int(V_3), int(V_4), int(C_V), int(AI)]
+        y = [datetime(int(Dt_1[2]), int(Dt_1[1]), int(Dt_1[0])),
+             datetime(int(Dt_2[2]), int(Dt_2[1]), int(Dt_2[0])),
+             datetime(int(Dt_3[2]), int(Dt_3[1]), int(Dt_3[0])),
+             datetime(int(Dt_4[2]), int(Dt_4[1]), int(Dt_4[0])),
+             today.date(), month.date()]
+
+        plt.style.use("seaborn")
+        plt.subplots(nrows=1, num="BetterU")
+        plt.plot_date(y, x, linestyle="solid")
+        plt.gcf().autofmt_xdate()
+        plt.ylabel("Value", color="Green")
+        plt.xlabel("Date", color="Green")
+        plt.title(f"Your {Test} chart", color="Green")
+        plt.annotate("AI calculated value", (y[5], x[5]), (y[5], x[5]+0.5))
+        plt.tight_layout()
+        plt.show()
+
+    # Heading
+    Heading_G = Label(Screen_6, text="BetterU", padx=40, fg='Green')
+    myFont_H_G = ("Comic Sans MS", 40, "bold")
+    Heading_G.grid(row=0, column=0, columnspan=3)
+    Heading_G.configure(font=myFont_H_G)
+
+    # Welcome Message
+    Level_G = Label(Screen_6, text="      ")
+    Level_G.grid(row=1, column=0)
+
+    message_G = Label(Screen_6, text="Smart Management of Vitamins and diabetes")
+    myFont_W_G = ("Arial", 15)
+    message_G.grid(row=1, column=1, columnspan=2)
+    message_G.configure(font=myFont_W_G)
+
+    # Frame
+    frame_6 = LabelFrame(Screen_6, padx=10, pady=10)
+    frame_6.grid(row=3, column=1, columnspan=3, padx=10, pady=10)
+
+    # Dropdown menu options
+    options = [
+        "Vitamin-D",
+        "Sugar",
+        "Cholesterol",
+        "Blood-Pressure",
+    ]
+
+    clicked = StringVar()
+    clicked.set("Vitamin-D")
+
+    # Create Dropdown menu
+    drop = OptionMenu(frame_6, clicked, *options)
+    drop.grid(row=0, column=0, columnspan=3)
+
+    # Date inputs
+    Date_1 = Entry(frame_6, width=15, borderwidth=2, fg="Grey")
+    Date_2 = Entry(frame_6, width=15, borderwidth=2, fg="Grey")
+    Date_3 = Entry(frame_6, width=15, borderwidth=2, fg="Grey")
+    Date_4 = Entry(frame_6, width=15, borderwidth=2, fg="Grey")
+    Date_1.grid(row=1, column=0, pady=5, padx=1)
+    Date_2.grid(row=2, column=0, pady=5, padx=1)
+    Date_3.grid(row=3, column=0, pady=5, padx=1)
+    Date_4.grid(row=4, column=0, pady=5, padx=1)
+    Date_1.insert(0, "DD/MM/YYYY")
+    Date_2.insert(0, "DD/MM/YYYY")
+    Date_3.insert(0, "DD/MM/YYYY")
+    Date_4.insert(0, "DD/MM/YYYY")
+
+    # Value inputs
+    Current_Value = Entry(frame_6, width=40, borderwidth=2)
+    Value_1 = Entry(frame_6, width=25, borderwidth=2)
+    Value_2 = Entry(frame_6, width=25, borderwidth=2)
+    Value_3 = Entry(frame_6, width=25, borderwidth=2)
+    Value_4 = Entry(frame_6, width=25, borderwidth=2)
+    Current_Value.grid(row=5, column=0, pady=5, columnspan=3)
+    Value_1.grid(row=1, column=2, pady=5)
+    Value_2.grid(row=2, column=2, pady=5)
+    Value_3.grid(row=3, column=2, pady=5)
+    Value_4.grid(row=4, column=2, pady=5)
+    Value_1.insert(0, "Enter your value")
+    Value_2.insert(0, "Enter your value")
+    Value_3.insert(0, "Enter your value")
+    Value_4.insert(0, "Enter your value")
+    Current_Value.insert(0, "Enter your current value")
+
+    def Go_Back():
+        Screen_6.destroy()
+        Screen_1.deiconify()
+
+    # Submit
+    myFont_6 = font.Font(size=12)
+    Submit_6 = Button(Screen_6, text="Get the graph", command=Graph, padx=10, font=myFont_6, fg="Green")
+    Submit_6.grid(row=4, column=1, padx=10, pady=10, columnspan=3)
+
+    # Exit
+    Exit_6 = Button(Screen_6, text='Exit', command=root.destroy, padx=20)
+    Exit_6.grid(row=5, column=1, columnspan=3)
+
+    # Back
+    Back_6 = Button(Screen_6, text='Back', command=Go_Back, padx=20)
+    Back_6.grid(row=6, column=1, columnspan=3)
+
+
+myFont_G = font.Font(size=15)
+Submit_G = Button(Screen_1, text="Get your Graph", command=Get_Graph, padx=20)
+Submit_G.grid(row=6, column=1, padx=10)
+
+# Submit Button
+myFont = font.Font(size=15)
+Submit = Button(root, text="Let's Proceed", command=Submit_form, padx=10, font=myFont, fg="Green")
+Submit.grid(row=3, column=1, padx=10, pady=10)
+
+myFont_1 = font.Font(size=15)
+Submit_1 = Button(Screen_1, text="Let's Proceed", command=Submit_form_1, padx=10, font=myFont_1, fg="Green")
+Submit_1.grid(row=5, column=1, padx=10, pady=10)
+
+# Exit Button
+Exit_1 = Button(root, text='Exit', command=root.destroy, padx=20)
+Exit_2 = Button(Screen_1, text='Exit', command=root.destroy, padx=20)
+Exit_1.grid(row=6, column=1)
+Exit_2.grid(row=7, column=1)
+# Execute tkinter
+root.mainloop()
